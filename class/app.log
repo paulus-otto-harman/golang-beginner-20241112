@@ -1,7 +1,0 @@
-{"L":"ERROR","T":"2024-11-12T14:27:53.022+0700","M":"PaymentMethodHandler_createBook_formfile","error":"http: no such file"}
-{"L":"INFO","T":"2024-11-12T14:27:53.022+0700","M":"http request","method":"POST","url":"/api/payment-methods","duration":"2.795458ms"}
-{"L":"INFO","T":"2024-11-12T14:52:04.837+0700","M":"http request","method":"POST","url":"/api/payment-methods","duration":"628.639166ms"}
-{"L":"ERROR","T":"2024-11-12T14:53:16.498+0700","M":"Error creating payment method","error":"pq: new row for relation \"payment_methods\" violates check constraint \"test\""}
-{"L":"INFO","T":"2024-11-12T14:53:16.500+0700","M":"http request","method":"POST","url":"/api/payment-methods","duration":"93.262417ms"}
-{"L":"ERROR","T":"2024-11-12T14:54:19.918+0700","M":"PaymentMethodHandler_createBook_formfile","error":"http: no such file"}
-{"L":"INFO","T":"2024-11-12T14:54:19.919+0700","M":"http request","method":"POST","url":"/api/payment-methods","duration":"5.095375ms"}

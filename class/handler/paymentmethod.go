@@ -1,21 +1,15 @@
 package handler
 
 import (
-	"20241112/config"
 	"20241112/lib"
 	"20241112/model"
 	"20241112/service"
 	"fmt"
-	"github.com/google/uuid"
 	gola "github.com/paulus-otto-harman/golang-module/web"
 	"go.uber.org/zap"
-	"io"
 	"log"
 	"net/http"
-	"os"
-	"path/filepath"
 	"reflect"
-	"strings"
 )
 
 type PaymentMethodHandler struct {
@@ -47,7 +41,7 @@ func (handler PaymentMethodHandler) Create(w http.ResponseWriter, r *http.Reques
 		IsActive: isActive,
 		Photo:    file.Uploaded.FullUrl,
 	}
-	
+
 	if err := handler.PaymentMethodService.Create(paymentMethod); err != nil {
 		log.Println(err)
 		lib.JsonResponse(w).Fail(http.StatusInternalServerError, "Unable to create item")
@@ -70,36 +64,4 @@ func (handler PaymentMethodHandler) Update(w http.ResponseWriter, r *http.Reques
 
 func (handler PaymentMethodHandler) Delete(w http.ResponseWriter, r *http.Request) {
 
-}
-
-func handleUploadedFile(inputName string, mandatory bool, w http.ResponseWriter, r *http.Request) (string, error) {
-	if err := r.ParseMultipartForm(10 << 20); err != nil {
-		lib.JsonResponse(w).Fail(http.StatusUnprocessableEntity, "File size too large (Max 10MB)")
-		return "", err
-	}
-
-	file, fileHandler, err := r.FormFile(inputName)
-	if err != nil && mandatory {
-		lib.JsonResponse(w).Fail(http.StatusUnprocessableEntity, fmt.Sprintf("%s is required", inputName))
-	}
-	if err != nil {
-		return "", err
-	}
-	defer file.Close()
-	fileExtension := fileHandler.Filename[strings.LastIndex(fileHandler.Filename, "."):]
-
-	fileRenamed := filepath.Join(config.UploadDir, uuid.New().String()+fileExtension)
-	destination, err := os.Create(fileRenamed)
-	if err != nil {
-		log.Println(err)
-		lib.JsonResponse(w).Fail(http.StatusInternalServerError, "Unable to store file at server")
-		return "", err
-	}
-	defer destination.Close()
-
-	if _, err = io.Copy(destination, file); err != nil {
-		lib.JsonResponse(w).Fail(http.StatusInternalServerError, "Unable to store file at server")
-		return "", err
-	}
-	return fileRenamed, nil
 }

@@ -37,7 +37,7 @@ func NewRouter(db *sql.DB) *chi.Mux {
 
 	//OrderHandler := InitializeOrderHandler()
 	//log.Println(OrderHandler)
-
+	handleBookReview := handler.InitBookReviewHandler(*service.InitBookReviewService(*repository.InitBookReviewRepo(db)))
 	handlePaymentMethod := handler.InitPaymentMethodHandler(*service.InitPaymentMethodService(*repository.InitPaymentMethodRepo(db, logger)), logger)
 	handleWebTemplate := handler.InitWebPageHandler(*service.InitWebPageService(*repository.InitWebPageRepo(initTemplate())))
 
@@ -63,6 +63,7 @@ func NewRouter(db *sql.DB) *chi.Mux {
 		r.Use(middleware.JsonResponse())
 		//r.With(mwLogger.MiddlewareLogger).Post("/store_book", handlerBookHandler.CreateBook)
 		r.Post("/orders", handleOrder.Create)
+		r.Post("/review", handleBookReview.Create)
 		r.With(mwLogger.MiddlewareLogger).Route("/payment-methods", func(r chi.Router) {
 			r.Post("/", handlePaymentMethod.Create)
 			r.Get("/", handlePaymentMethod.All)
